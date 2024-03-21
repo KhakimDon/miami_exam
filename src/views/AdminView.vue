@@ -12,7 +12,7 @@ export default {
             store: useStundetStore(), // от пиниа
             login: '', // логин админа
             password: '', // пароль админа
-            passed: true, // прошёл ли админ авторизацию
+            passed: false, // прошёл ли админ авторизацию
             error: false, // ошибка при авторизации
 
             arr: [], // все месяца
