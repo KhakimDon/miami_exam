@@ -113,7 +113,7 @@ export default {
         <div class="wrapper">
           If you are not satisfied with the result or facing problems with
           checking your results, feel free to contact the number below.
-          <router-link :to="'/admin'">linkName</router-link>
+          <router-link :to="'/admin'">linkName </router-link>
         </div>
       </div>
       <div class="bottom">
