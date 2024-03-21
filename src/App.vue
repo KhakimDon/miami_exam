@@ -1,7 +1,12 @@
-<script setup lang="ts">
+<script>
 import { RouterLink, RouterView } from 'vue-router'
 import './style.css'
 
+export default{
+  components:{
+    RouterView,
+  },
+}
 
 
 
