@@ -1,6 +1,6 @@
 <script>
 import { db } from "../firebase.ts"
-import { query, collection, getDocs, orderBy, updateDoc, doc, setDoc } from "firebase/firestore";
+import { query, collection, getDocs, orderBy, updateDoc, doc, setDoc,deleteDoc   } from "firebase/firestore";
 import { useStundetStore } from '../stores/students'
 
 
@@ -12,7 +12,7 @@ export default {
             store: useStundetStore(), // от пиниа
             login: '', // логин админа
             password: '', // пароль админа
-            passed: false, // прошёл ли админ авторизацию
+            passed: true, // прошёл ли админ авторизацию
             error: false, // ошибка при авторизации
 
             arr: [], // все месяца
@@ -62,7 +62,17 @@ export default {
             this.eventID = event.target.value
             this.showMonth = this.arr[this.eventID]
             let items = document.querySelectorAll(".categories")
-            for (let i of items) i.value == this.eventID ? i.classList.add("active") : i.classList.remove("active")
+            // for (let i of items) i.value == this.eventID ? i.classList.add("active") : i.classList.remove("active")
+            for (let i of items) {
+                console.log();
+                if (i.value == this.eventID) {
+                    i.classList.add("active")
+                    i.nextElementSibling.classList.add("asideActive")
+                } else {
+                    i.classList.remove("active")
+                    i.nextElementSibling.classList.remove("asideActive")
+                }
+            }
         },
         // добавление экзамена 
         async addExam() {
@@ -125,6 +135,17 @@ export default {
             let filtered = this.arr[this.eventID].students.filter(item => item.id !== items.id)
             this.arr[this.eventID].students = filtered
             await setDoc(doc(db, "exam", this.arr[this.eventID].info.idx), this.arr[this.eventID]);
+        },
+        // удаление месяца 
+        async deleteMonth(items) {
+           
+            // await setDoc(doc(db, "exam", 0), this.arr);
+            // let filtered = this.arr[this.eventID].students.filter(item => item.id !== items.id)
+            // this.arr[this.eventID].students = filtered
+            await deleteDoc(doc(db, "exam", this.arr[this.eventID].info.idx) )
+            let filtered = this.arr.filter(item => item != items)
+            this.arr = filtered
+
         }
 
 
@@ -195,10 +216,21 @@ export default {
                             <li class="mb-[10px] font-[400]">
                                 Проведённые экзамены:
                             </li>
-                            <li v-for="item of this.arr" :key="item.id">
+                            <li class="relative" v-for="item of this.arr" :key="item.id">
+                              
                                 <button @click="show()" :value="this.arr.indexOf(item)"
-                                    class="categories btn outline-none mb-[10px] w-[100%]">{{ item.info.title
-                                    }}</button>
+                                    class="categories btn outline-none mb-[10px] w-[100%]">
+
+                                    {{ item.info.title
+                                    }}
+                                </button>
+                                <aside class="aside" @click="deleteMonth(item)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                </aside>
                             </li>
                             <li>
                                 <button onclick="my_modal_4.showModal()" :value="'item'"
@@ -348,10 +380,10 @@ export default {
                                                                                 class="flex flex-col">
                                                                                 <span class="text-[red] font-[500]">{{
             fall.subjects.it.mark }} - {{
-                                                                                    Math.round((+fall.subjects.it.mark.split('/')[0]
-                                                                                    * 100) /
-                                                                                    +fall.subjects.it.mark.split('/')[1])
-                                                                                    }}%</span>
+            Math.round((+fall.subjects.it.mark.split('/')[0]
+                * 100) /
+                +fall.subjects.it.mark.split('/')[1])
+        }}%</span>
                                                                                 <span>{{ fall.subjects.it.teacher
                                                                                     }}</span>
                                                                             </div>
@@ -411,8 +443,8 @@ export default {
                                                     v-if="item.subjects.english.mark.length > 0 && item.subjects.english.teacher.length > 0">
                                                     <div>
                                                         <button class="text-[red]">{{ item.subjects.english.mark }} - {{
-                                                            Math.round( (+item.subjects.english.mark.split('/')[0] *
-                                                            100) / +item.subjects.english.mark.split('/')[1] )
+                                                            Math.round((+item.subjects.english.mark.split('/')[0] *
+                                                            100) / +item.subjects.english.mark.split('/')[1])
                                                             }}%</button>
                                                     </div>
                                                     <span class="font-[400] text-[12px]">{{
@@ -474,6 +506,29 @@ export default {
 .active {
     background: red;
     color: white;
+    position: relative;
+}
+
+.aside {
+    cursor: pointer;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0px;
+    left: -60px;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background: rgba(255, 0, 0, 0.742);
+    border-radius: 10px;
+}
+.aside svg{
+    color: white;
+}
+
+.asideActive{
+    opacity: 1;
 }
 
 .active:hover {
@@ -495,8 +550,9 @@ export default {
         max-width: initial !important;
         width: 100%;
     }
+
     .m451 {
-        padding: 20px !important; 
+        padding: 20px !important;
     }
 
     .m450table {
@@ -532,12 +588,13 @@ export default {
         flex-direction: column;
         padding: 10px !important;
     }
+
     .m450pop1 {
         flex: initial !important;
         padding: 0px !important;
         margin: 0 !important;
     }
 
-   
+
 }
 </style>
