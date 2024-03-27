@@ -26,6 +26,7 @@ export default {
   },
   mounted() {
     this.getItems()
+
   },
   data() {
     return {
@@ -45,6 +46,7 @@ export default {
       querySnap.forEach((doc) => {
         this.arr.unshift(doc.data())
       })
+      console.log('success');
     },
     link(link) {
       window.location.href = link
@@ -263,14 +265,18 @@ export default {
                         <tr v-for="(i,index) of item.subjects" :key="i.id"> 
                           <td v-if="i.mark.length>0 && i.teacher.length>0" class="text-[19px] no font-[600] capitalize">{{index}}</td>
                           <td v-if="i.mark.length>0 && i.teacher.length>0" class="text-[19px] no font-[600] capitalize">{{ i.teacher }}</td>
-                          <td v-if="i.mark.length>0 && i.teacher.length>0" class="text-[19px] no font-[600] capitalize"> {{Math.round( (+i.mark.split('/')[0] * 100) / +i.mark.split('/')[1] ) }}%</td>
-                          <td v-if="i.mark.length>0 && i.teacher.length>0 &&  Math.round( (+i.mark.split('/')[0] * 100) / +i.mark.split('/')[1]) > 50" class="text-[19px] font-[600] capitalize">
+                          <td v-if="i.mark.length>0 && i.teacher.length>0 && i.mark != 'abs'" class="text-[19px] no font-[600] capitalize"> {{Math.round( (+i.mark.split('/')[0] * 100) / +i.mark.split('/')[1] ) }}%</td>
+                          <td v-if="i.mark == 'abs'" class="text-[19px] no font-[600] capitalize">Abs</td>
+
+                          <td v-if="i.mark.length>0 && i.teacher.length>0 &&  Math.round( (+i.mark.split('/')[0] * 100) / +i.mark.split('/')[1]) >= 50" class="text-[19px] font-[600] capitalize">
                             <span class="bg-[#C60002] no px-[7px] py-[2px] text-white">Passed</span>
                           </td>
-                          <td v-if="i.mark.length>0 && i.teacher.length>0 && Math.round( (+i.mark.split('/')[0] * 100) / +i.mark.split('/')[1]) < 50" class="text-[19px] font-[600] capitalize">
+
+                          <td v-if="i.mark == 'abs'||i.mark.length>0 && i.teacher.length>0 && Math.round( (+i.mark.split('/')[0] * 100) / +i.mark.split('/')[1]) < 50" class="text-[19px] font-[600] capitalize">
                             <span class="text-[#C60002] no">Failed</span>                            
                           </td>
-                        </tr>
+
+                        </tr> 
                       
                       </tbody>
                     </table>

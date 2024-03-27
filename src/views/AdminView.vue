@@ -33,6 +33,7 @@ export default {
     },
     created() {
         this.getItems()
+        
     },
     methods: {
         // получить массив из firebase
@@ -42,6 +43,7 @@ export default {
             querySnap.forEach((doc) => {
                 this.arr.push(doc.data())
             })
+
 
         },
         // проверка пароля и логина
@@ -64,7 +66,6 @@ export default {
             let items = document.querySelectorAll(".categories")
             // for (let i of items) i.value == this.eventID ? i.classList.add("active") : i.classList.remove("active")
             for (let i of items) {
-                console.log();
                 if (i.value == this.eventID) {
                     i.classList.add("active")
                     i.nextElementSibling.classList.add("asideActive")
@@ -130,6 +131,15 @@ export default {
 
             await setDoc(doc(db, "exam", this.arr[this.eventID].info.idx), concats);
         },
+
+        // // debug 
+        // actionss(){
+        //     this.addFallback = [] надо поставить объекты 
+        //     this.saveFallback()   и кнш пушить
+
+        // },
+
+
         // удаление из firebase 
         async deleteItem(items) {
             let filtered = this.arr[this.eventID].students.filter(item => item.id !== items.id)
@@ -155,6 +165,7 @@ export default {
 
 </script>
 <template>
+    <!-- <button @click="actionss">click</button> for adding  -->
     <main>
         <!-- вход  -->
         <div v-if="!passed" class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -217,7 +228,6 @@ export default {
                                 Проведённые экзамены:
                             </li>
                             <li class="relative" v-for="item of this.arr" :key="item.id">
-                              
                                 <button @click="show()" :value="this.arr.indexOf(item)"
                                     class="categories btn outline-none mb-[10px] w-[100%]">
 
@@ -442,10 +452,7 @@ export default {
                                                 <div
                                                     v-if="item.subjects.english.mark.length > 0 && item.subjects.english.teacher.length > 0">
                                                     <div>
-                                                        <button class="text-[red]">{{ item.subjects.english.mark }} - {{
-                                                            Math.round((+item.subjects.english.mark.split('/')[0] *
-                                                            100) / +item.subjects.english.mark.split('/')[1])
-                                                            }}%</button>
+                                                        <button class="text-[red]">{{ item.subjects.english.mark }}</button>
                                                     </div>
                                                     <span class="font-[400] text-[12px]">{{
                                                         item.subjects.english.teacher }}</span>
@@ -453,12 +460,9 @@ export default {
                                                 </div>
                                             </th>
                                             <th>
-                                                <div
-                                                    v-if="item.subjects.math.mark.length > 0 && item.subjects.math.teacher.length > 0">
+                                                <div>   
                                                     <div>
-                                                        <button class="text-[red]">{{ item.subjects.math.mark }} - {{
-                                                            Math.round( (+item.subjects.math.mark.split('/')[0] * 100) /
-                                                            +item.subjects.math.mark.split('/')[1] ) }}%</button>
+                                                        <button class="text-[red]">{{ item.subjects.math.mark }}</button>
                                                     </div>
                                                     <span class="font-[400] text-[12px]">{{ item.subjects.math.teacher
                                                         }}</span>
@@ -468,9 +472,7 @@ export default {
                                                 <div
                                                     v-if="item.subjects.it.mark.length > 0 && item.subjects.it.teacher.length > 0">
                                                     <div>
-                                                        <button class="text-[red]">{{ item.subjects.it.mark }} - {{
-                                                            Math.round( (+item.subjects.it.mark.split('/')[0] * 100) /
-                                                            +item.subjects.it.mark.split('/')[1] ) }}%</button>
+                                                        <button class="text-[red]">{{ item.subjects.it.mark }} </button>
                                                     </div>
                                                     <span class="font-[400] text-[12px]">{{ item.subjects.it.teacher
                                                         }}</span>
