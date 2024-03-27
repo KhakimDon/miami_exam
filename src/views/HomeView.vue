@@ -17,7 +17,7 @@ export default {
     Pagination
   },
   setup() {
-    return {
+    return {  
       modules: [Scrollbar, Pagination, Navigation],
       values: '',
       pop: false,
@@ -46,6 +46,10 @@ export default {
       querySnap.forEach((doc) => {
         this.arr.unshift(doc.data())
       })
+      console.log(this.arr);
+      for(let u of this.arr){
+        console.log(u.students.length);
+      }
       console.log('success');
     },
     link(link) {

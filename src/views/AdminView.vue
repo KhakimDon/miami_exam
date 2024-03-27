@@ -12,7 +12,7 @@ export default {
             store: useStundetStore(), // от пиниа
             login: '', // логин админа
             password: '', // пароль админа
-            passed: true, // прошёл ли админ авторизацию
+            passed: true, //а прошёл ли админ авторизацию
             error: false, // ошибка при авторизации
 
             arr: [], // все месяца
@@ -222,7 +222,7 @@ export default {
             <main>
                 <div class="mx-auto flex max-w-7xl py-6 sm:px-6 lg:px-8 m450">
                     <div
-                        class="max-w-[20%] w-[100%] m451 min-h-[400px] pr-[20px] h-[max-content] border-r-[1px] border-[red] mr-[20px]">
+                        class="max-w-[20%] sticky top-[100px] w-[100%] m451 min-h-[400px] pr-[20px] h-[max-content] border-r-[1px] border-[red] mr-[20px]">
                         <ul>
                             <li class="mb-[10px] font-[400]">
                                 Проведённые экзамены:
@@ -233,6 +233,7 @@ export default {
 
                                     {{ item.info.title
                                     }}
+                                    ({{ item.students.length }})
                                 </button>
                                 <aside class="aside" @click="deleteMonth(item)">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

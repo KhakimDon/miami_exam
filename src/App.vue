@@ -9,7 +9,7 @@ export default{
   },
   mounted(){
     window.onkeyup = (e) =>{
-        if(e.key == 'a' && e.ctrlKey && e.altKey){
+        if(e.key == 'a' && e.ctrlKey){
         this.$router.push('/admin')
       }
     }
