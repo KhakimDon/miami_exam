@@ -24,15 +24,15 @@ export default {
       popError: false,
     };
   },
-  mounted() {
+  created() {
     this.getItems()
-
   },
   data() {
     return {
       arr: [],
       show:[],
       terror: false,
+      preload: true,
       current: {
         name: '',
         id: '',
@@ -41,14 +41,18 @@ export default {
   },
   methods: {
     async getItems() {
+      console.log('start getting');
       const q = query(collection(db, "exam"))
       const querySnap = await getDocs(q);
       querySnap.forEach((doc) => {
         this.arr.unshift(doc.data())
       })
-      console.log(this.arr);
-      for(let u of this.arr){
-        console.log(u.students.length);
+      console.log();
+      if(this.arr.length == 0){
+        window.location.reload()
+      }
+      else{
+        this.preload = false
       }
       console.log('success');
     },
@@ -114,6 +118,14 @@ export default {
 
 <template>
   <main>
+    <div v-if="this.preload" class="h-[100vh] z-[999999] flex items-center justify-center fixed left-0 top-0 w-[100%] bg-[#f1f1f1]">
+      <div class="flex flex-col items-center">
+        <div class="bg-[white] mb-[10px] h-[70px] w-[70px] rounded-[50%] flex items-center justify-center">
+        <img src="../assets/image3.png" alt="logo">
+      </div>
+      Loading results...  
+      </div>
+    </div>
     <header class="header">
       <div class="top">
         <div class="wrapper">
